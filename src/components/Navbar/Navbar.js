@@ -5,6 +5,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
+import {SearchBox} from "../SearchBox/SearchBox";
 
 export function Navbar() {
     return (
@@ -16,7 +17,6 @@ export function Navbar() {
                     </Typography>
                     <Button color="inherit">POKEMON LIST</Button>
                     <Button color="inherit">CAUGHT POKEMON</Button>
-
                 </Toolbar>
             </AppBar>
         </Box>
