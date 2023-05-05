@@ -1,5 +1,4 @@
-import { Provider, useDispatch, useSelector } from "react-redux";
-import store from "../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { fetchPokemon } from "../../redux/actions/pokemonActions";
 
@@ -29,11 +28,3 @@ export function Home() {
     );
 }
 
-// App.js
-export default function App() {
-    return (
-        <Provider store={store}>
-            <Home />
-        </Provider>
-    );
-}

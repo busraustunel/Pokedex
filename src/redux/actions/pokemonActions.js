@@ -5,19 +5,19 @@ export const FETCH_POKEMON_SUCCESS = "FETCH_POKEMON_SUCCESS";
 export const FETCH_POKEMON_FAILURE = "FETCH_POKEMON_FAILURE";
 
 export const fetchPokemon = () => {
-    return (dispatch) => {
+    return async (dispatch) => {
         dispatch(fetchPokemonRequest());
-        axios
-            .get("pokemon?limit=151")
-            .then((response) => {
-                const pokemonList = response.data.results;
-                dispatch(fetchPokemonSuccess(pokemonList));
-            })
-            .catch((error) => {
-                dispatch(fetchPokemonFailure(error.message));
-            });
+        try {
+            const response = await axios.get("pokemon?limit=151");
+            const pokemonList = response.data.results;
+            const pokemonListWithImages = await Promise.all(pokemonList.map(fetchPokemonWithImage));
+            dispatch(fetchPokemonSuccess(pokemonListWithImages));
+        } catch (error) {
+            dispatch(fetchPokemonFailure(error.message));
+        }
     };
 };
+
 
 export const fetchPokemonRequest = () => {
     return {
@@ -38,3 +38,13 @@ export const fetchPokemonFailure = (error) => {
         payload: error,
     };
 };
+
+const fetchPokemonWithImage = async (pokemon) => {
+    const response = await axios.get(`pokemon/${pokemon.name}`);
+    const pokemonWithImage = {
+        ...pokemon,
+        sprites: response.data.sprites
+    };
+    return pokemonWithImage;
+}
+
