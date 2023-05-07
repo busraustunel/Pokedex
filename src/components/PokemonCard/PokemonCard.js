@@ -1,45 +1,53 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchPokemon } from "../../redux/actions/pokemonActions";
-import {Card, CardContent, CardMedia, CircularProgress, Typography} from "@mui/material";
-import {useStyles} from "./style";
+import { Card, CardContent, CardMedia, CircularProgress, Typography, Grid, Button } from "@mui/material";
+import { useStyles } from "./style";
 
-
+// TO DO: stiller ayrılacak.
 export function PokemonCard() {
     const dispatch = useDispatch();
-    const pokemonList = useSelector((state) => state.pokemon.pokemonList);
-    const loading = useSelector((state) => state.pokemon.loading);
-    const error = useSelector((state) => state.pokemon.error);
+    const { pokemonList, loading, error } = useSelector((state) => state.pokemon);
     const classes = useStyles();
+    const [visibleCards, setVisibleCards] = useState(12);
 
     useEffect(() => {
         dispatch(fetchPokemon());
     }, [dispatch]);
 
+    const handleLoadMore = () => {
+        setVisibleCards(visibleCards + 12);
+    };
+
     return (
-        <div>
+        <div style={{ padding: "20px" }}>
             {loading && (
                 <div className={classes.loaderContainer}>
                     <CircularProgress />
                 </div>
             )}
             {error && <p>{error}</p>}
-            <div style={{ display: "flex", flexWrap: "wrap" }}>
-                {pokemonList.map((pokemon) => (
-                    <Card key={pokemon.id} className={classes.root}>
-                        <CardMedia
-                            className={classes.media}
-                            image={pokemon.sprites && pokemon.sprites.other.dream_world.front_default ? pokemon.sprites.other.dream_world.front_default : ""}
-                            title={pokemon.name}
-                        />
-                        <CardContent>
-                            <Typography gutterBottom variant="h5" component="h2">
-                                {pokemon.name}
-                            </Typography>
-                        </CardContent>
-                    </Card>
+            <Grid container spacing={3} justifyContent="center">
+                {pokemonList.slice(0, visibleCards).map((pokemon) => (
+                    <Grid item key={pokemon.id} xs={12} sm={6} md={4} lg={3}>
+                        <Card className={classes.root}>
+                            <CardMedia className={classes.media} image={pokemon.sprites?.other.dream_world.front_default || ""} title={pokemon.name} />
+                            <CardContent>
+                                <Typography gutterBottom variant="h5" component="h2">
+                                    {pokemon.name}
+                                </Typography>
+                            </CardContent>
+                        </Card>
+                    </Grid>
                 ))}
-            </div>
+            </Grid>
+            {visibleCards < pokemonList.length && (
+                <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
+                    <Button variant="contained" color="inherit" onClick={handleLoadMore}>
+                        Load More
+                    </Button>
+                </div>
+            )}
         </div>
     );
 }
