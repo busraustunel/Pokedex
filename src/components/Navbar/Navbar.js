@@ -18,6 +18,8 @@ export function Navbar() {
                     </Typography>
                     <Button color="inherit" component={Link} to="/">POKEMON LIST</Button>
                     <Button  color="inherit" component={Link} to="caught-pokemon">CAUGHT POKEMON</Button>
+                    <Button  color="inherit" component={Link} to="favorite-pokemons">FAVORİTE POKEMONS</Button>
+
                 </Toolbar>
             </AppBar>
         </Box>

@@ -1,9 +1,8 @@
+import {CaughtPokemonList} from "../../components/CaughtPokemonList/CaughtPokemonList";
 
 
 export function CaughtPokemonScreen () {
     return (
-        <div>
-            Yakalanan pokemonlar
-        </div>
+        <CaughtPokemonList />
     );
 }

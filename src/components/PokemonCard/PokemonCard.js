@@ -11,6 +11,7 @@ export function PokemonCard() {
     const classes = useStyles();
     const [visibleCards, setVisibleCards] = useState(12);
     const [caughtList, setCaughtList] = useState(Array(pokemonList.length).fill(false));
+    const [favoriteList, setFavoriteList] = useState(Array(pokemonList.length).fill(false));
 
     useEffect(() => {
         dispatch(fetchPokemon());
@@ -41,10 +42,21 @@ export function PokemonCard() {
         console.log(pokemon.name + " released");
     };
 
-    const handleAddFavorite = (pokemon) => {
+    const handleAddFavorite = (pokemon, index) => {
+        const updatedFavoriteList = [...favoriteList];
+        updatedFavoriteList[index] = true;
+        setFavoriteList(updatedFavoriteList);
         dispatch(addFavorite(pokemon));
-        console.log(pokemon.name);
+        console.log(pokemon.name + "add favorite");
     };
+
+    const handleDeleteFavorite = (pokemon, index) => {
+        const updatedFavoriteList = [...favoriteList];
+        updatedFavoriteList[index] = false;
+        setFavoriteList(updatedFavoriteList);
+        dispatch(addFavorite(pokemon));
+        console.log(pokemon.name + "delete favorite");
+    }
 
     return (
         <div style={{ padding: "20px" }}>
@@ -68,6 +80,13 @@ export function PokemonCard() {
                                     onClick={() => caughtList[index] ? handleRelease(pokemon, index) : handleCatch(pokemon, index)}
                                 >
                                     {caughtList[index] ? "Release" : "Catch"}
+                                </Button>
+                                <Button
+                                  variant="inherit"
+                                  onClick={() => favoriteList[index] ? handleDeleteFavorite(pokemon, index) : handleAddFavorite(pokemon, index)}
+                                >
+                                    {favoriteList[index] ? "Delete Favorite" : "Add Favorite"}
+
                                 </Button>
 
                             </CardContent>
