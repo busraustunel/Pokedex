@@ -10,7 +10,7 @@ export const useStyles = makeStyles((theme) => ({
     },
     root: {
         width: 350,
-        height: 400,
+        height: 500,
         margin: "10px",
         cursor: "pointer",
           "&:hover": {
