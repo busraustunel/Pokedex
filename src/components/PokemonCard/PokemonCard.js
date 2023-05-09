@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchPokemon } from "../../redux/actions/pokemonActions";
 import { Card, CardContent, CardMedia, CircularProgress, Typography, Grid, Button } from "@mui/material";
 import { useStyles } from "./style";
-import {addFavorite, catchPokemon, releasePokemon} from "../../redux/actions/caughtActions";
+import {addFavorite, catchPokemon, releasePokemon, removeFavorite} from "../../redux/actions/caughtActions";
 
 export function PokemonCard() {
     const dispatch = useDispatch();
@@ -22,24 +22,28 @@ export function PokemonCard() {
         favorite: false
     }));
 
-    const handleCatch = (pokemon, index) => {
-        const updatedCaughtList = [...caughtList];
-        updatedCaughtList[index] = true;
-        setCaughtList(updatedCaughtList);
-        dispatch(catchPokemon(pokemon));
-        console.log(pokemon.name + " caught");
-    };
-
     const handleLoadMore = () => {
         setVisibleCards(visibleCards + 12);
     };
 
+    const handleCatch = (pokemon, index) => {
+        if (!caughtList[index]) { // sadece ilk defa yakalanmışsa işlemleri yap
+            const updatedCaughtList = [...caughtList];
+            updatedCaughtList[index] = true;
+            setCaughtList(updatedCaughtList);
+            dispatch(catchPokemon(pokemon));
+            console.log(pokemon.name + " caught");
+        }
+    };
+
     const handleRelease = (pokemon, index) => {
-        const updatedCaughtList = [...caughtList];
-        updatedCaughtList[index] = false;
-        setCaughtList(updatedCaughtList);
-        dispatch(releasePokemon(pokemon));
-        console.log(pokemon.name + " released");
+        if (caughtList[index]) { // sadece daha önce yakalamışsa işlemleri yap
+            const updatedCaughtList = [...caughtList];
+            updatedCaughtList[index] = false;
+            setCaughtList(updatedCaughtList);
+            dispatch(releasePokemon(pokemon));
+            console.log(pokemon.name + " released");
+        }
     };
 
     const handleAddFavorite = (pokemon, index) => {
@@ -47,16 +51,17 @@ export function PokemonCard() {
         updatedFavoriteList[index] = true;
         setFavoriteList(updatedFavoriteList);
         dispatch(addFavorite(pokemon));
-        console.log(pokemon.name + "add favorite");
+        console.log(pokemon.name + " added to favorites");
     };
 
     const handleDeleteFavorite = (pokemon, index) => {
         const updatedFavoriteList = [...favoriteList];
         updatedFavoriteList[index] = false;
         setFavoriteList(updatedFavoriteList);
-        dispatch(addFavorite(pokemon));
-        console.log(pokemon.name + "delete favorite");
-    }
+        dispatch(removeFavorite(pokemon.id));
+        console.log(pokemon.name + " removed from favorites");
+    };
+
 
     return (
         <div style={{ padding: "20px" }}>
