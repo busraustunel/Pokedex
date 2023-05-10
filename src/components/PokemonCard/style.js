@@ -13,6 +13,14 @@ export const useStyles = makeStyles((theme) => ({
             boxShadow: '0 3px 15px rgba(0, 0, 0, 0.3)',
         },
     },
+    searchContainer: {
+        display: 'flex',
+        justifyContent: 'center',
+        marginBottom: theme.spacing(2),
+    },
+    textField: {
+        width: 300,
+    },
     mediaContainer: {
         position: 'relative',
         paddingTop: '100%',
