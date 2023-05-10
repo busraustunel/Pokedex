@@ -1,31 +1,31 @@
-import {makeStyles} from "@material-ui/core";
-
+import {makeStyles} from "@material-ui/core/styles";
 
 export const useStyles = makeStyles((theme) => ({
-    loaderContainer: {
+    container: {
         display: "flex",
-        justifyContent: "center",
+        flexDirection: "column",
         alignItems: "center",
-        height: "100vh",
+        padding: theme.spacing(3),
+        backgroundColor: '#f87103',
+        borderRadius: theme.spacing(2),
+        boxShadow: theme.shadows[4],
+        [theme.breakpoints.up("sm")]: {
+            padding: theme.spacing(5),
+        },
     },
-    root: {
-        width: 350,
-        height: 500,
-        margin: "10px",
-        cursor: "pointer",
-          "&:hover": {
-              transform: "scale(1.1)",
-              transition: "all 0.3s ease-in-out",
-                boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.75)",
-                backgroundColor: "#b2b1a7",
-          },
-          },
-    media: {
-        height: 300,
-        padding: "10px",
-        backgroundSize: "contain",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
+    image: {
+        width: "200px",
+        height: "200px",
+        marginBottom: theme.spacing(3),
+        borderRadius: theme.spacing(1),
+        boxShadow: theme.shadows[2],
     },
-
+    abilityCard: {
+        backgroundColor: theme.palette.primary.main,
+        color: theme.palette.common.white,
+        padding: theme.spacing(0.5, 1),
+        borderRadius: theme.spacing(0.5),
+        display: "inline-block",
+        margin: theme.spacing(0.5),
+    },
 }));
