@@ -66,40 +66,59 @@ export function PokemonCard() {
     };
 
     return (
-        <div style={{ padding: "20px" }}>
+        <div style={{ padding: '20px' }}>
             {loading && (
                 <div className={classes.loaderContainer}>
                     <CircularProgress />
                 </div>
             )}
             {error && <p>{error}</p>}
-            <Grid container spacing={3} justifyContent="center">
+            <Grid container justifyContent="center">
                 {updatedPokemonList.slice(0, visibleCards).map((pokemon, index) => (
                     <Grid item key={pokemon.id} xs={12} sm={6} md={4} lg={3}>
                         <Card className={classes.root}>
-                            <CardMedia className={classes.media} image={pokemon.sprites?.other.dream_world.front_default || ""} title={pokemon.name} />
-                            <CardContent>
-                                <Typography gutterBottom variant="h5" component="h2">
+                            <div className={classes.mediaContainer}>
+                                <CardMedia
+                                    className={classes.media}
+                                    image={pokemon.sprites?.other.dream_world.front_default || ''}
+                                    title={pokemon.name}
+                                />
+                            </div>
+                            <CardContent className={classes.cardContent}>
+                                <Typography gutterBottom variant="h5" component="h2" className={classes.title}>
                                     {pokemon.name}
                                 </Typography>
-                                <Button variant="contained" onClick={() => (isPokemonCaught(pokemon) ? handleRelease(pokemon) : handleCatch(pokemon))}>
-                                    {isPokemonCaught(pokemon) ? "Release" : "Catch"}
-                                </Button>
-                                <Button variant="inherit" onClick={() => (isPokemonFavorite(pokemon) ? handleDeleteFavorite(pokemon) : handleAddFavorite(pokemon))}>
-                                    {isPokemonFavorite(pokemon) ? "Delete Favorite" : "Add Favorite"}
-                                </Button>
-                                <Button component={Link} to={`/pokemon/${pokemon.id}`}>Go to details</Button>
-
-
-
-
+                                <div className={classes.buttonContainer}>
+                                    <Button
+                                        variant="contained"
+                                        onClick={() => (isPokemonCaught(pokemon) ? handleRelease(pokemon) : handleCatch(pokemon))}
+                                        className={classes.link}
+                                    >
+                                        {isPokemonCaught(pokemon) ? 'Release' : 'Catch'}
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        onClick={() => (isPokemonFavorite(pokemon) ? handleDeleteFavorite(pokemon) : handleAddFavorite(pokemon))}
+                                        className={classes.link2}
+                                    >
+                                        {isPokemonFavorite(pokemon) ? 'Delete Favorite' : 'Add Favorite'}
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        className={classes.link3}
+                                        component={Link}
+                                        to={`/pokemon/${pokemon.id}`}
+                                    >
+                                        Go to details
+                                    </Button>
+                                </div>
                             </CardContent>
                         </Card>
                     </Grid>
                 ))}
             </Grid>
             {visibleCards < pokemonList.length && (
-                <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
+                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
                     <Button variant="contained" color="inherit" onClick={handleLoadMore}>
                         Load More
                     </Button>
@@ -107,5 +126,5 @@ export function PokemonCard() {
             )}
         </div>
     );
+};
 
-}
