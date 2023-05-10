@@ -81,20 +81,11 @@ export const fetchPokemonDetails = (id) => {
             const pokemonDetails = response.data;
             dispatch(fetchPokemonDetailsSuccess(pokemonDetails));
         } catch (error) {
-            console.log("Network error. Retrying in 5 seconds...");
-            await new Promise(resolve => setTimeout(resolve, 5000)); // 5 saniye bekle
-            try {
-                const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`);
-                const pokemonDetails = response.data;
-                dispatch(fetchPokemonDetailsSuccess(pokemonDetails));
-            } catch (error) {
-                dispatch(fetchPokemonDetailsFailure(error.message));
-                console.log(error);
-            }
+            dispatch(fetchPokemonDetailsFailure(error.message));
+            console.log(error);
         }
     };
 };
-
 
 
 

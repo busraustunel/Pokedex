@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchPokemon } from "../../redux/actions/pokemonActions";
 import { Card, CardContent, CardMedia, CircularProgress, Typography, Grid, Button } from "@mui/material";
 import { useStyles } from "./style";
 import {addFavorite, catchPokemon, releasePokemon, removeFavorite} from "../../redux/actions/caughtActions";
 import {Link} from "react-router-dom";
+import {fetchPokemon} from "../../redux/actions/pokemonActions";
 
 export function PokemonCard() {
     const dispatch = useDispatch();
@@ -13,6 +13,9 @@ export function PokemonCard() {
     const [visibleCards, setVisibleCards] = useState(12);
     const [caughtList, setCaughtList] = useState(Array(pokemonList.length).fill(false));
     const [favoriteList, setFavoriteList] = useState(Array(pokemonList.length).fill(false));
+
+
+
 
     useEffect(() => {
         dispatch(fetchPokemon());
@@ -64,6 +67,7 @@ export function PokemonCard() {
         console.log(pokemon.name + " removed from favorites");
     };
 
+
     return (
         <div style={{ padding: "20px" }}>
             {loading && (
@@ -89,11 +93,9 @@ export function PokemonCard() {
                                     <Button variant="inherit" onClick={() => (favoriteList[index] ? handleDeleteFavorite(pokemon, index) : handleAddFavorite(pokemon, index))}>
                                         {favoriteList[index] ? "Delete Favorite" : "Add Favorite"}
                                     </Button>
-                                    <Button component={Link} to={`/pokemon/${pokemon.id}`}>Go to details</Button>
-
-
-
-
+                                    <Button variant="inherit" component={Link} to={`/pokemon/${pokemon.url.split("/").slice(-2, -1)[0]}`}>
+                                        Go to Details
+                                    </Button>
                                 </CardContent>
                             </Card>
                     </Grid>
