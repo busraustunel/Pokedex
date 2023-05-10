@@ -12,9 +12,11 @@ import {useStyles} from "./style";
 
 export function PokemonDetails(props) {
     const dispatch = useDispatch();
-    const { pokemonDetails, loading, error } = useSelector(
+    const { pokemonDetails = undefined, loading, error } = useSelector(
         (state) => state.pokemon
     );
+
+
     const { id } = useParams();
     const classes = useStyles();
 
@@ -32,32 +34,36 @@ export function PokemonDetails(props) {
         return <div>Error: {error.message}</div>;
     }
 
-    return (
-        <Card className={classes.container}>
-            <CardMedia
-                className={classes.image}
-                image={pokemonDetails.sprites.front_default}
-                title={pokemonDetails.name}
-            />
-            <CardContent>
-                <Typography variant="h5" component="div">
-                    {pokemonDetails.name}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                    Height: {pokemonDetails.height}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                    Weight: {pokemonDetails.weight}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                    Abilities:
-                    {pokemonDetails.abilities.map((ability) => (
-                        <div className={classes.abilityCard}>
-                            {ability.ability.name}
-                        </div>
-                    ))}
-                </Typography>
-            </CardContent>
-        </Card>
-    );
+        return (
+
+            <Card className={classes.container}>
+                <CardMedia
+                    className={classes.image}
+                    image={pokemonDetails?.sprites?.other?.dream_world?.front_default || ''}
+                    title={pokemonDetails?.name}
+                />
+
+                <CardContent>
+                    <Typography variant="h5" component="div">
+                        {pokemonDetails.name}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                        Height: {pokemonDetails.height}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                        Weight: {pokemonDetails.weight}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                        Abilities:
+                        {pokemonDetails.abilities.map((ability) => (
+                            <div className={classes.abilityCard}>
+                                {ability.ability.name}
+                            </div>
+                        ))}
+                    </Typography>
+                </CardContent>
+            </Card>
+
+        );
+
 }
