@@ -11,9 +11,9 @@ export function PokemonCard() {
     const { pokemonList, loading, error } = useSelector((state) => state.pokemon);
     const classes = useStyles();
     const [visibleCards, setVisibleCards] = useState(12);
-    // const [caughtList, setCaughtList] = useState(Array(pokemonList.length).fill(false));
     const [caughtList, setCaughtList] = useState(useSelector((state) => state.caught.caughtList));
-    const [favoriteList, setFavoriteList] = useState(Array(pokemonList.length).fill(false));
+    const [favoriteList, setFavoriteList] = useState(useSelector((state) => state.caught.favoriteList));
+
 
     useEffect(() => {
         dispatch(fetchPokemon());
@@ -47,19 +47,21 @@ export function PokemonCard() {
         return caughtList.some((poke) => poke.name === pokemon.name);
     }
 
+    const isPokemonFavorite = (pokemon) => {
+        return favoriteList.some((poke) => poke.name === pokemon.name);
+    }
+
     const handleAddFavorite = (pokemon, index) => {
-        const updatedFavoriteList = [...favoriteList];
-        updatedFavoriteList[index] = true;
+        const updatedFavoriteList = [...favoriteList, pokemon];
         setFavoriteList(updatedFavoriteList);
         dispatch(addFavorite(pokemon));
         console.log(pokemon.name + " added to favorites");
     };
 
     const handleDeleteFavorite = (pokemon, index) => {
-        const updatedFavoriteList = [...favoriteList];
-        updatedFavoriteList[index] = false;
+        const updatedFavoriteList = favoriteList.filter((poke) => poke.name !== pokemon.name);
         setFavoriteList(updatedFavoriteList);
-        dispatch(removeFavorite(pokemon.id));
+        dispatch(removeFavorite(pokemon));
         console.log(pokemon.name + " removed from favorites");
     };
 
@@ -81,12 +83,10 @@ export function PokemonCard() {
                                     {pokemon.name}
                                 </Typography>
                                 <Button variant="contained" onClick={() => (isPokemonCaught(pokemon) ? handleRelease(pokemon) : handleCatch(pokemon))}>
-                                    {isPokemonCaught(pokemon) ? "Release" : "Catch"
-
-                                    }
+                                    {isPokemonCaught(pokemon) ? "Release" : "Catch"}
                                 </Button>
-                                <Button variant="inherit" onClick={() => (favoriteList[index] ? handleDeleteFavorite(pokemon, index) : handleAddFavorite(pokemon, index))}>
-                                    {favoriteList[index] ? "Delete Favorite" : "Add Favorite"}
+                                <Button variant="inherit" onClick={() => (isPokemonFavorite(pokemon) ? handleDeleteFavorite(pokemon) : handleAddFavorite(pokemon))}>
+                                    {isPokemonFavorite(pokemon) ? "Delete Favorite" : "Add Favorite"}
                                 </Button>
                                 <Button component={Link} to={`/pokemon/${pokemon.id}`}>Go to details</Button>
 

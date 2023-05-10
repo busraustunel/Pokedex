@@ -2,7 +2,7 @@ import {ADD_FAVORITE, CATCH_POKEMON, RELEASE_POKEMON, REMOVE_FAVORITE} from "../
 
 const initialState = {
     caughtList: [],
-    favorites: [],
+    favoriteList: [],
 };
 
 const caughtReducer = (state = initialState, action) => {
@@ -24,12 +24,15 @@ const caughtReducer = (state = initialState, action) => {
         case ADD_FAVORITE:
             return {
                 ...state,
-                favorites: [...state.favorites, action.payload],
+                favoriteList: [...state.favoriteList, action.payload],
+
             };
         case REMOVE_FAVORITE:
             return {
                 ...state,
-                favorites: state.favorites.filter((id) => id !== action.payload),
+                favoriteList: state.favoriteList.filter(
+                    (pokemon) => pokemon.name !== action.payload.name
+                ),
             };
         default:
             return state;

@@ -17,16 +17,16 @@ export const releasePokemon = (pokemon) => {
     };
 };
 
-export const addFavorite = (id) => {
+export const addFavorite = (pokemon) => {
     return {
         type: ADD_FAVORITE,
-        payload: id,
+        payload: pokemon,
     };
 };
 
-export const removeFavorite = (id) => {
+export const removeFavorite = (pokemon) => {
     return {
         type: REMOVE_FAVORITE,
-        payload: id,
+        payload: pokemon,
     };
 };
