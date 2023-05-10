@@ -18,7 +18,7 @@ const caughtReducer = (state = initialState, action) => {
             return {
                 ...state,
                 caughtList: state.caughtList.filter(
-                    (pokemon) => pokemon.id !== action.payload
+                    (pokemon) => pokemon.name !== action.payload.name
                 ),
             };
         case ADD_FAVORITE:

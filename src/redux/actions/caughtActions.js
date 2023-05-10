@@ -10,10 +10,10 @@ export const catchPokemon = (pokemon) => {
     };
 };
 
-export const releasePokemon = (id) => {
+export const releasePokemon = (pokemon) => {
     return {
         type: RELEASE_POKEMON,
-        payload: id,
+        payload: pokemon,
     };
 };
 

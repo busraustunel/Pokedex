@@ -1,21 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { fetchPokemon } from "../../redux/actions/pokemonActions";
 import { Card, CardContent, CardMedia, CircularProgress, Typography, Grid, Button } from "@mui/material";
 import { useStyles } from "./style";
 import {addFavorite, catchPokemon, releasePokemon, removeFavorite} from "../../redux/actions/caughtActions";
 import {Link} from "react-router-dom";
-import {fetchPokemon} from "../../redux/actions/pokemonActions";
 
 export function PokemonCard() {
     const dispatch = useDispatch();
     const { pokemonList, loading, error } = useSelector((state) => state.pokemon);
     const classes = useStyles();
     const [visibleCards, setVisibleCards] = useState(12);
-    const [caughtList, setCaughtList] = useState(Array(pokemonList.length).fill(false));
+    // const [caughtList, setCaughtList] = useState(Array(pokemonList.length).fill(false));
+    const [caughtList, setCaughtList] = useState(useSelector((state) => state.caught.caughtList));
     const [favoriteList, setFavoriteList] = useState(Array(pokemonList.length).fill(false));
-
-
-
 
     useEffect(() => {
         dispatch(fetchPokemon());
@@ -31,25 +29,23 @@ export function PokemonCard() {
     };
 
     const handleCatch = (pokemon, index) => {
-        if (!caughtList[index]) {
-            const updatedCaughtList = [...caughtList];
-            updatedCaughtList[index] = true;
-            setCaughtList(updatedCaughtList);
-            dispatch(catchPokemon(pokemon));
-            console.log(pokemon.name + " caught");
-        }
+        const updatedCaughtList = [...caughtList, pokemon];
+        setCaughtList(updatedCaughtList);
+        dispatch(catchPokemon(pokemon));
+        console.log(pokemon.name + " caught");
+
     };
 
     const handleRelease = (pokemon, index) => {
-        if (caughtList[index]) {
-            const updatedCaughtList = [...caughtList];
-            updatedCaughtList[index] = false;
-            setCaughtList(updatedCaughtList);
-            dispatch(releasePokemon(pokemon));
-            dispatch(releasePokemon(caughtList));
-            console.log(pokemon.name + " released");
-        }
+        const updatedCaughtList = caughtList.filter((poke) => poke.name !== pokemon.name);
+        setCaughtList(updatedCaughtList);
+        dispatch(releasePokemon(pokemon));
+        console.log(pokemon.name + " released");
     };
+
+    const isPokemonCaught = (pokemon) => {
+        return caughtList.some((poke) => poke.name === pokemon.name);
+    }
 
     const handleAddFavorite = (pokemon, index) => {
         const updatedFavoriteList = [...favoriteList];
@@ -67,7 +63,6 @@ export function PokemonCard() {
         console.log(pokemon.name + " removed from favorites");
     };
 
-
     return (
         <div style={{ padding: "20px" }}>
             {loading && (
@@ -79,25 +74,27 @@ export function PokemonCard() {
             <Grid container spacing={3} justifyContent="center">
                 {updatedPokemonList.slice(0, visibleCards).map((pokemon, index) => (
                     <Grid item key={pokemon.id} xs={12} sm={6} md={4} lg={3}>
-                            <Card className={classes.root}>
-                                <CardMedia className={classes.media} image={pokemon.sprites?.other.dream_world.front_default || ""} title={pokemon.name} />
-                                <CardContent>
-                                    <Typography gutterBottom variant="h5" component="h2">
-                                        {pokemon.name}
-                                    </Typography>
-                                    <Button variant="contained" onClick={() => (caughtList[index] ? handleRelease(pokemon, index) : handleCatch(pokemon, index))}>
-                                        {caughtList[index] ? "Release" : "Catch"
+                        <Card className={classes.root}>
+                            <CardMedia className={classes.media} image={pokemon.sprites?.other.dream_world.front_default || ""} title={pokemon.name} />
+                            <CardContent>
+                                <Typography gutterBottom variant="h5" component="h2">
+                                    {pokemon.name}
+                                </Typography>
+                                <Button variant="contained" onClick={() => (isPokemonCaught(pokemon) ? handleRelease(pokemon) : handleCatch(pokemon))}>
+                                    {isPokemonCaught(pokemon) ? "Release" : "Catch"
 
-                                        }
-                                    </Button>
-                                    <Button variant="inherit" onClick={() => (favoriteList[index] ? handleDeleteFavorite(pokemon, index) : handleAddFavorite(pokemon, index))}>
-                                        {favoriteList[index] ? "Delete Favorite" : "Add Favorite"}
-                                    </Button>
-                                    <Button variant="inherit" component={Link} to={`/pokemon/${pokemon.url.split("/").slice(-2, -1)[0]}`}>
-                                        Go to Details
-                                    </Button>
-                                </CardContent>
-                            </Card>
+                                    }
+                                </Button>
+                                <Button variant="inherit" onClick={() => (favoriteList[index] ? handleDeleteFavorite(pokemon, index) : handleAddFavorite(pokemon, index))}>
+                                    {favoriteList[index] ? "Delete Favorite" : "Add Favorite"}
+                                </Button>
+                                <Button component={Link} to={`/pokemon/${pokemon.id}`}>Go to details</Button>
+
+
+
+
+                            </CardContent>
+                        </Card>
                     </Grid>
                 ))}
             </Grid>

@@ -11,11 +11,9 @@ export function CaughtPokemonList() {
     const classes = useStyles();
 
     const handleRelease = (pokemon, index) => {
-        const updatedCaughtList = [...caughtList];
-        updatedCaughtList.splice(index, 1);
+        const updatedCaughtList = caughtList.filter((poke) => poke.name !== pokemon.name);
         setCaughtList(updatedCaughtList);
         dispatch(releasePokemon(pokemon));
-        console.log(pokemon.name + " released");
     };
 
     return (
