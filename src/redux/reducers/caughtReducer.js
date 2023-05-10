@@ -12,6 +12,8 @@ const caughtReducer = (state = initialState, action) => {
                 ...state,
                 caughtList: [...state.caughtList, action.payload],
             };
+
+
         case RELEASE_POKEMON:
             return {
                 ...state,

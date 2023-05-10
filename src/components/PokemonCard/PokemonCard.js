@@ -4,6 +4,7 @@ import { fetchPokemon } from "../../redux/actions/pokemonActions";
 import { Card, CardContent, CardMedia, CircularProgress, Typography, Grid, Button } from "@mui/material";
 import { useStyles } from "./style";
 import {addFavorite, catchPokemon, releasePokemon, removeFavorite} from "../../redux/actions/caughtActions";
+import {Link} from "react-router-dom";
 
 export function PokemonCard() {
     const dispatch = useDispatch();
@@ -27,7 +28,7 @@ export function PokemonCard() {
     };
 
     const handleCatch = (pokemon, index) => {
-        if (!caughtList[index]) { // sadece ilk defa yakalanmışsa işlemleri yap
+        if (!caughtList[index]) {
             const updatedCaughtList = [...caughtList];
             updatedCaughtList[index] = true;
             setCaughtList(updatedCaughtList);
@@ -37,11 +38,12 @@ export function PokemonCard() {
     };
 
     const handleRelease = (pokemon, index) => {
-        if (caughtList[index]) { // sadece daha önce yakalamışsa işlemleri yap
+        if (caughtList[index]) {
             const updatedCaughtList = [...caughtList];
             updatedCaughtList[index] = false;
             setCaughtList(updatedCaughtList);
             dispatch(releasePokemon(pokemon));
+            dispatch(releasePokemon(caughtList));
             console.log(pokemon.name + " released");
         }
     };
@@ -62,7 +64,6 @@ export function PokemonCard() {
         console.log(pokemon.name + " removed from favorites");
     };
 
-
     return (
         <div style={{ padding: "20px" }}>
             {loading && (
@@ -74,28 +75,27 @@ export function PokemonCard() {
             <Grid container spacing={3} justifyContent="center">
                 {updatedPokemonList.slice(0, visibleCards).map((pokemon, index) => (
                     <Grid item key={pokemon.id} xs={12} sm={6} md={4} lg={3}>
-                        <Card className={classes.root}>
-                            <CardMedia className={classes.media} image={pokemon.sprites?.other.dream_world.front_default || ""} title={pokemon.name} />
-                            <CardContent>
-                                <Typography gutterBottom variant="h5" component="h2">
-                                    {pokemon.name}
-                                </Typography>
-                                <Button
-                                    variant="contained"
-                                    onClick={() => caughtList[index] ? handleRelease(pokemon, index) : handleCatch(pokemon, index)}
-                                >
-                                    {caughtList[index] ? "Release" : "Catch"}
-                                </Button>
-                                <Button
-                                  variant="inherit"
-                                  onClick={() => favoriteList[index] ? handleDeleteFavorite(pokemon, index) : handleAddFavorite(pokemon, index)}
-                                >
-                                    {favoriteList[index] ? "Delete Favorite" : "Add Favorite"}
+                            <Card className={classes.root}>
+                                <CardMedia className={classes.media} image={pokemon.sprites?.other.dream_world.front_default || ""} title={pokemon.name} />
+                                <CardContent>
+                                    <Typography gutterBottom variant="h5" component="h2">
+                                        {pokemon.name}
+                                    </Typography>
+                                    <Button variant="contained" onClick={() => (caughtList[index] ? handleRelease(pokemon, index) : handleCatch(pokemon, index))}>
+                                        {caughtList[index] ? "Release" : "Catch"
 
-                                </Button>
+                                        }
+                                    </Button>
+                                    <Button variant="inherit" onClick={() => (favoriteList[index] ? handleDeleteFavorite(pokemon, index) : handleAddFavorite(pokemon, index))}>
+                                        {favoriteList[index] ? "Delete Favorite" : "Add Favorite"}
+                                    </Button>
+                                    <Button component={Link} to={`/pokemon/${pokemon.id}`}>Go to details</Button>
 
-                            </CardContent>
-                        </Card>
+
+
+
+                                </CardContent>
+                            </Card>
                     </Grid>
                 ))}
             </Grid>
