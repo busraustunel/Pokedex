@@ -22,14 +22,24 @@ export function FavoritePokemonList() {
                 {favoriteList.map((pokemon, index) => (
                     <Grid item key={pokemon.id} xs={12} sm={6} md={4} lg={3}>
                         <Card className={classes.root}>
-                            <CardMedia className={classes.media} image={pokemon.sprites?.other.dream_world.front_default || ""} title={pokemon.name} />
-                            <CardContent>
-                                <Typography gutterBottom variant="h5" component="h2">
+                            <div className={classes.mediaContainer}>
+                                <CardMedia
+                                    className={classes.media}
+                                    image={pokemon.sprites?.other.dream_world.front_default || ''}
+                                    title={pokemon.name}
+                                />
+                            </div>
+                            <CardContent className={classes.cardContent}>
+                                <Typography gutterBottom variant="h5" component="h2" className={classes.title}>
                                     {pokemon.name}
                                 </Typography>
-                                <Button variant="contained" onClick={() => handleDeleteFavorite(pokemon, index)}>
-                                    DELETE FAVORİTE
-                                </Button>
+                                <div className={classes.buttonContainer}>
+                                    <Button
+                                        onClick={() => handleDeleteFavorite(pokemon)}
+                                    >
+                                        REMOVE FAVORITE
+                                    </Button>
+                                </div>
                             </CardContent>
                         </Card>
                     </Grid>

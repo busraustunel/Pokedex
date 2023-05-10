@@ -47,29 +47,26 @@ export const useStyles = makeStyles((theme) => ({
         justifyContent: 'space-between',
         marginTop: theme.spacing(2),
     },
-    link: {
-        textDecoration: 'none',
-        fontWeight: 'bold',
-        textAlign: 'center',
-        backgroundColor: 'rgba(171,147,53,0.76)',
-        padding: '3px',
-        margin: '2px'
+    catchButton: {
+        backgroundColor: 'green',
+        color: 'white',
+        '&:hover': {
+            backgroundColor: 'darkgreen',
+        },
     },
-    link2: {
-        textDecoration: 'none',
-        fontWeight: 'bold',
-        textAlign: 'center',
-        backgroundColor: 'rgba(53,171,55,0.76)',
-        padding: '3px',
-        margin: '2px'
+    favoriteButton: {
+        backgroundColor: '#ab4848',
+        color: '#af5a5a',
+        '&:hover': {
+            backgroundColor: 'darkpurple',
+        },
     },
-    link3: {
-        textDecoration: 'none',
-        fontWeight: 'bold',
-        textAlign: 'center',
-        backgroundColor: 'rgba(53,171,157,0.76)',
-        padding: '3px',
-        margin: '2px'
+    detailsButton: {
+        backgroundColor: '#f87103',
+        color: 'white',
+        '&:hover': {
+            backgroundColor: 'darkblue',
+        },
     },
 }));
 

@@ -1,7 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchPokemon } from "../../redux/actions/pokemonActions";
-import { Card, CardContent, CardMedia, CircularProgress, Typography, Grid, Button } from "@mui/material";
+import {
+    Card,
+    CardContent,
+    CardMedia,
+    CircularProgress,
+    Typography,
+    Grid,
+    Button,
+    ThemeProvider,
+    createTheme
+} from "@mui/material";
 import { useStyles } from "./style";
 import {addFavorite, catchPokemon, releasePokemon, removeFavorite} from "../../redux/actions/caughtActions";
 import {Link} from "react-router-dom";
@@ -13,7 +23,6 @@ export function PokemonCard() {
     const [visibleCards, setVisibleCards] = useState(12);
     const [caughtList, setCaughtList] = useState(useSelector((state) => state.caught.caughtList));
     const [favoriteList, setFavoriteList] = useState(useSelector((state) => state.caught.favoriteList));
-
 
     useEffect(() => {
         dispatch(fetchPokemon());
@@ -90,24 +99,22 @@ export function PokemonCard() {
                                 </Typography>
                                 <div className={classes.buttonContainer}>
                                     <Button
-                                        variant="contained"
+                                        className={classes.catchButton}
                                         onClick={() => (isPokemonCaught(pokemon) ? handleRelease(pokemon) : handleCatch(pokemon))}
-                                        className={classes.link}
                                     >
                                         {isPokemonCaught(pokemon) ? 'Release' : 'Catch'}
                                     </Button>
                                     <Button
-                                        variant="contained"
+                                        className={classes.favoriteButton}
                                         onClick={() => (isPokemonFavorite(pokemon) ? handleDeleteFavorite(pokemon) : handleAddFavorite(pokemon))}
-                                        className={classes.link2}
                                     >
                                         {isPokemonFavorite(pokemon) ? 'Delete Favorite' : 'Add Favorite'}
                                     </Button>
                                     <Button
+                                        classes={classes.detailsButton}
                                         variant="contained"
-                                        className={classes.link3}
                                         component={Link}
-                                        to={`/pokemon/${pokemon.id}`}
+                                        to={`/pokemon/${pokemon.url.split("/").slice(-2, -1)[0]}`}
                                     >
                                         Go to details
                                     </Button>
@@ -117,6 +124,7 @@ export function PokemonCard() {
                     </Grid>
                 ))}
             </Grid>
+
             {visibleCards < pokemonList.length && (
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
                     <Button variant="contained" color="inherit" onClick={handleLoadMore}>
