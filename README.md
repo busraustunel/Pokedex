@@ -72,3 +72,12 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 # Pokedex
+
+This project is a Pokemon catching application developed using PokeAPI.co API. It is built with React and Redux.
+
+## Features
+
+- View a list of Pokemon
+- Catch and release Pokemon
+- Add and remove favorite Pokemon
+- View Pokemon details
