@@ -1,69 +1,75 @@
-import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { fetchPokemonDetails } from "../../redux/actions/pokemonActions";
-import {
-    Card, CardContent, CardMedia,
-    CircularProgress,
-    Typography,
-} from "@mui/material";
-import {useStyles} from "./style";
+import { CircularProgress, Typography, Button, Grid, Card, CardContent, CardMedia } from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
 
-
-export function PokemonDetails(props) {
+export function PokemonDetails() {
     const dispatch = useDispatch();
-    const { pokemonDetails = undefined, loading, error } = useSelector(
+    const { pokemonDetails, loading, error } = useSelector(
         (state) => state.pokemon
     );
-
-
     const { id } = useParams();
-    const classes = useStyles();
+    const navigate = useNavigate();
 
     useEffect(() => {
-        if (id) {
-            dispatch(fetchPokemonDetails(id));
-        }
+        dispatch(fetchPokemonDetails(id));
     }, [dispatch, id]);
 
+    const handleGoBack = () => {
+        navigate(-1);
+    };
+
     if (loading) {
-        return <CircularProgress />;
+        return (
+            <div style={{ display: "flex", justifyContent: "center" }}>
+                <CircularProgress />
+            </div>
+        );
     }
 
     if (error) {
-        return <div>Error: {error.message}</div>;
+        return <p>{error}</p>;
     }
 
-        return (
+    if (!pokemonDetails) {
+        return null;
+    }
 
-            <Card className={classes.container}>
+    return (
+        <div>
+            <Typography variant="h2" gutterBottom>
+                {pokemonDetails.name}
+            </Typography>
+            <Card sx={{ maxWidth: 400 }}>
                 <CardMedia
-                    className={classes.image}
-                    image={pokemonDetails?.sprites?.other?.dream_world?.front_default || ''}
-                    title={pokemonDetails?.name}
+                    component="img"
+                    height="400"
+                    image={pokemonDetails.sprites?.other.dream_world.front_default || ""}
+                    alt={pokemonDetails.name}
                 />
-
                 <CardContent>
-                    <Typography variant="h5" component="div">
-                        {pokemonDetails.name}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        Height: {pokemonDetails.height}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        Weight: {pokemonDetails.weight}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography variant="h4" gutterBottom>
                         Abilities:
-                        {pokemonDetails.abilities.map((ability) => (
-                            <div className={classes.abilityCard}>
-                                {ability.ability.name}
-                            </div>
-                        ))}
                     </Typography>
+                    <ul>
+                        {pokemonDetails.abilities.map((ability, index) => (
+                            <li key={index}>{ability.ability.name}</li>
+                        ))}
+                    </ul>
+                    <Typography variant="h4" gutterBottom>
+                        Moves:
+                    </Typography>
+                    <ul>
+                        {pokemonDetails.moves.map((move, index) => (
+                            <li key={index}>{move.move.name}</li>
+                        ))}
+                    </ul>
+                    <Button variant="contained" color="primary" onClick={handleGoBack}>
+                        Back
+                    </Button>
                 </CardContent>
             </Card>
-
-        );
-
+        </div>
+    );
 }

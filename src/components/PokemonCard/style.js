@@ -13,6 +13,10 @@ export const useStyles = makeStyles((theme) => ({
             boxShadow: '0 3px 15px rgba(0, 0, 0, 0.3)',
         },
     },
+    loaderContainer: {
+        display: "flex",
+        justifyContent: "center"
+    },
     searchContainer: {
         display: 'flex',
         justifyContent: 'center',
