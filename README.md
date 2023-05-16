@@ -1,5 +1,5 @@
 # LIVE DEMO
-https://pokedex-busraustunel.vercel.app
+pokedex-lac-eta.vercel.app
 
 # Getting Started with Create React App
 
